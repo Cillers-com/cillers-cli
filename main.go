@@ -22,6 +22,7 @@ func registerCommands() {
 	lib.RegisterCommand("new", commands.CommandNew)
 	lib.RegisterCommand("help", commands.CommandHelp)
 	lib.RegisterCommand("version", commands.CommandVersion)
+	lib.RegisterCommand("start", commands.CommandStart)
 }
 
 func run() error {

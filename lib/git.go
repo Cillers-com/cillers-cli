@@ -17,24 +17,28 @@ func AssertOriginURL(path, expectedURL string) error {
 	if err != nil {
 		return fmt.Errorf("failed to get origin URL: %w", err)
 	}
-
 	actualURL := strings.TrimSpace(result.Stdout)
 	expectedURL = strings.TrimSpace(expectedURL)
-
 	// Remove .git suffix if present for both URLs
 	actualURL = strings.TrimSuffix(actualURL, ".git")
 	expectedURL = strings.TrimSuffix(expectedURL, ".git")
-
 	if actualURL != expectedURL {
 		return fmt.Errorf("origin URL does not match expected URL.\nExpected: %s\nActual: %s", expectedURL, actualURL)
 	}
-
 	return nil
 }
 
 // Clone clones a Git repository
-func Clone(url, targetName string, verbose bool) error {
-	_, err := Execute(".", []string{"git", "clone", url, targetName}, verbose)
+func Clone(url, targetName, branch string, verbose bool) error {
+	args := []string{"git", "clone"}
+	
+	if branch != "" {
+		args = append(args, "-b", branch)
+	}
+	
+	args = append(args, url, targetName)
+
+	_, err := Execute(".", args, verbose)
 	if err != nil {
 		return fmt.Errorf("failed to clone repository: %w", err)
 	}
@@ -49,13 +53,11 @@ func Reset(path string, verbose bool) error {
 		{"git", "add", "."},
 		{"git", "commit", "-m", "Initial commit"},
 	}
-
 	for _, cmd := range commands {
 		_, err := Execute(path, cmd, verbose)
 		if err != nil {
 			return fmt.Errorf("failed to execute command '%v': %w", cmd, err)
 		}
 	}
-
 	return nil
 }

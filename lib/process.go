@@ -9,6 +9,7 @@ import (
 	"path/filepath"
 	"strings"
 	"sync"
+    "syscall"
 )
 
 // ExecResult represents the result of a command execution
@@ -91,4 +92,19 @@ func scanAndWrite(r io.Reader, builder *strings.Builder, w io.Writer, prefix str
 // ExecuteVerbose is a wrapper around Execute that always prints output
 func ExecuteVerbose(path string, commandArgs []string) (ExecResult, error) {
 	return Execute(path, commandArgs, true)
+}
+
+// Exec replaces the current process with a new command
+func ExecuteTakeOverCurrentProcess(command string, args []string) error {
+	path, err := exec.LookPath(command)
+	if err != nil {
+		return fmt.Errorf("command '%s' not found: %w", command, err)
+	}
+
+	if err := syscall.Exec(path, args, os.Environ()); err != nil {
+		return fmt.Errorf("failed to execute '%s': %w", command, err)
+	}
+
+	// This line will never be reached if Exec is successful
+	return nil
 }
