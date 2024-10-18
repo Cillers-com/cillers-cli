@@ -17,7 +17,7 @@ Commands:
   new <name>        Create a new system with the specified name
   help              Show this help message
   version           Show the version number
-  coder [task]      AI coding assistant that follows the instructions in .cillers/prompt files or uses the provided task.
+  coder [task]      AI coding assistant that follows the instructions in .cillers/context files.
   coder-init        Initialize a new .cillers/context directory with template files
   info <request>    Get information about the project
   review            A code review with general feedback and specific violoations of the specified directives.
