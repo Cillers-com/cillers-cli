@@ -1,0 +1,11 @@
+<task>
+    Create a new command 'init-coder' that creates a template-based .cillers/context directory in the currwent working directory, if it doesn't already exist. The template should contain the same files and content as the current .cillers/context in this project. The content templates should be coded as multiline strings so they will be embedded in the binary. Create a new directory in this project called coder/templates/context. Create one Go file per file that should be created by the 'init-coder' command. 
+</task>
+<restrictions>
+    <restriction>
+        You may add and change any file.
+    </restriction>
+    <restriction>
+        Do not change indentation. 
+    </restriction>
+</restrictions>

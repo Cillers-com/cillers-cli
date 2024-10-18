@@ -1,0 +1,7 @@
+<directive id="single-function-command-files">
+    The files in the commands directory may only contain one function.
+</directive>
+
+<directive id="glob-pattern-ignore-support">
+    The ignore file functionality in the coder module should support ** glob pattern. 
+</directive>

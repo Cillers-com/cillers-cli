@@ -6,9 +6,9 @@ type Config struct {
     DocumentationURL string
 }
 
-func Get() Config {
+func LoadConfig() Config {
     return Config{
-        Version:         "v0.1.0",
+        Version:         "v0.1.1",
         TemplateRepoURL: "https://github.com/Cillers-com/create-cillers-system",
         DocumentationURL: "https://github.com/Cillers-com/cillers-cli",
     }

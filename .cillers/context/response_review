@@ -1,0 +1,49 @@
+<instructions>
+    <instruction>
+        Format your response in the structure specified in the 'content_structure' element. 
+    </instruction>
+    <instruction>
+        Each section should have the title that is specified in the 'title' element. 
+    </instruction>
+    <instruction>
+        Each section should include the information specified in the 'content' element. 
+    </instruction>
+    <instruction>
+        Exclude sections if they have a 'only_include_if' element that is not satisfied.
+    </instruction>
+    <instruction>
+        The directives should be in alphabetical order.
+    </instruction>
+    <instruction>
+        'list' elements have a sub element 'of' that specifies which elements the list should contain. 
+    </instruction>
+    <instruction>
+        The h1, h2 and h3 elements should be equivalent to HTML header tags. h1 should have the largest bold text, h2 should be slightly smaller and h3 should be bold but same size as normal text. Use markdown for formatting the headers. 
+    </instruction>
+</instructions>
+<content_structure>
+    <section>
+        <h1>
+            Code Review 
+        </h1>
+        <content>
+            Provide a likely peer review of a developer that is keen on engineering excellence, simplicity, and readability. Provide one section with positive feedback, and one section with what could have been done better. 
+
+            Do not include any multi-line code blocks in this section. 
+        </content>
+    </section>
+    <section>
+        <h1>
+            Potentially Violated Directives 
+        </h1>
+        <content>
+            <list>
+                <of>All violoated directives</of>
+                <list_item>
+                    <h1>Directive ID</h1>
+                    <content>A list of the violations against the directive, including code examples of the violoations./content>
+                </list_item>
+            </list>
+        </content>
+    </section>
+</content_structure>

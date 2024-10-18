@@ -9,10 +9,10 @@ import (
 )
 
 type Config struct {
-	Stack []string `yaml:"stack"`
+	Stack []string `yaml:"cillers"`
 }
 
-func CommandStart(args []string, options map[string]bool) error {
+func Start(args []string, options map[string]bool) error {
 	verbose := options["verbose"]
 	if verbose {
 		fmt.Println("Starting Cillers ...")

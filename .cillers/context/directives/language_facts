@@ -1,0 +1,10 @@
+<directive id="go-facts">
+    Consider the following facts for Go
+
+    1. Deprecated Packages. The following Go packages are deprecated and must not be used: 
+    * io/ioutil
+
+    2. Function exports. To export a function in Go, you need to capitalize the first letter of the function name.  
+
+    3. Go doesn't support ** in its glob functionality.
+</directive>

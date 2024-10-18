@@ -6,8 +6,7 @@ import (
 	"cillers-cli/lib"
 )
 
-// CommandNew handles the 'new' command
-func CommandNew(args []string, options map[string]bool) error {
+func New(args []string, options map[string]bool) error {
 	if len(args) == 0 {
 		return fmt.Errorf("no name provided")
 	}
@@ -32,7 +31,7 @@ func CommandNew(args []string, options map[string]bool) error {
 		return fmt.Errorf("Git is not installed or not in the PATH")
 	}
 
-	cfg := config.Get()
+	cfg := config.LoadConfig()
 	fmt.Printf("Creating new system named '%s' from branch '%s'...\n", name, branch)
 
 	if err := lib.Clone(cfg.TemplateRepoURL, name, branch, verbose); err != nil {

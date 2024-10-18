@@ -13,16 +13,20 @@ func main() {
 
 	if err := run(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n\n", err)
-		_ = commands.CommandHelp(nil, nil)
+		_ = commands.Help(nil, nil)
 		os.Exit(1)
 	}
 }
 
 func registerCommands() {
-	lib.RegisterCommand("new", commands.CommandNew)
-	lib.RegisterCommand("help", commands.CommandHelp)
-	lib.RegisterCommand("version", commands.CommandVersion)
-	lib.RegisterCommand("start", commands.CommandStart)
+	lib.RegisterCommand("new", commands.New)
+	lib.RegisterCommand("help", commands.Help)
+	lib.RegisterCommand("version", commands.Version)
+	lib.RegisterCommand("start", commands.Start)
+	lib.RegisterCommand("coder", commands.Coder)
+	lib.RegisterCommand("info", commands.Info)
+	lib.RegisterCommand("review", commands.Review)
+	lib.RegisterCommand("coder-init", commands.CoderInit)
 }
 
 func run() error {

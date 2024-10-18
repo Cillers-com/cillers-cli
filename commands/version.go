@@ -6,9 +6,8 @@ import (
 	"cillers-cli/config"
 )
 
-// CommandVersion handles the 'version' command
-func CommandVersion(args []string, options map[string]bool) error {
-	cfg := config.Get()
+func Version(args []string, options map[string]bool) error {
+	cfg := config.LoadConfig()
 	fmt.Printf("Cillers CLI version %s\n", cfg.Version)
 	return nil
 }
