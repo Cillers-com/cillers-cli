@@ -1,15 +1,20 @@
 <task>
-    Create a new command 'add-commit-msg-hook'. This command should add a git prepare-commit-msg hook that calls claude sonnet api to with the "git diff --staged" to get the commit message. Verify that git is initialized in the directory, otherwise fail with a good error message.
-    The Anthropic API_KEY should be fetched from the .cillers/secrets_and_local_config/secrets.yml file in the anthropic.api_key value.
+    Split the add_commit_msg_hook.go file so that the bash script is generated in a separate file in the coder directory.
 </task>
 <restrictions>
     <restriction>
         You may add and change any file.
     </restriction>
     <restriction>
+        Do not make any changes that are not necessary for accomplishing the tasks.
+    </restriction>
+    <restriction>
         Do not change indentation. 
     </restriction>
 </restrictions>
+<directive>
+    Max 100 characters per line.
+</directive>
 <directive>
     Bash scripts must comply with the guidelines specified in the 'bash-directive' elements.
 </directive>
@@ -23,16 +28,18 @@
     Any code using the Anthropic Claude Sonnet REST API should be based on the following template which includes the current latest version numbers:
 
 curl https://api.anthropic.com/v1/messages \
-     --header "x-api-key: $ANTHROPIC_API_KEY" \
-     --header "anthropic-version: 2023-06-01" \
-     --header "content-type: application/json" \
+     --header &quot;x-api-key: $ANTHROPIC_API_KEY&quot; \
+     --header &quot;anthropic-version: 2023-06-01&quot; \
+     --header &quot;content-type: application/json&quot; \
      --data \
-'{
-    "model": "claude-3-5-sonnet-20240620",
-    "max_tokens": 1,
-    "messages": [
-        {"role": "user", "content": "What is latin for Ant? (A) Apoidea, (B) Rhopalocera, (C) Formicidae"},
-        {"role": "assistant", "content": "The answer is ("}
+&apos;{
+    &quot;model&quot;: &quot;claude-3-5-sonnet-20240620&quot;,
+    &quot;max_tokens&quot;: 1,
+    &quot;messages&quot;: [
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is latin for Ant? (A) Apoidea, (B) Rhopalocera, (C) Formicidae&quot;},
+        {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;The answer is (&quot;}
     ]
-}'
+}&apos;
+
 </directive>
+
