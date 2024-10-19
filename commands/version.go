@@ -1,13 +1,14 @@
 package commands
 
 import (
-	"fmt"
+    "fmt"
 
-	"cillers-cli/config"
+    "cillers-cli/config"
+    "cillers-cli/lib"
 )
 
-func Version(args []string, options map[string]bool) error {
-	cfg := config.LoadConfig()
-	fmt.Printf("Cillers CLI version %s\n", cfg.Version)
-	return nil
+func Version(parsedArgs lib.ParsedArgs) error {
+    cfg := config.LoadConfig()
+    fmt.Printf("Cillers CLI version %s\n", cfg.Version)
+    return nil
 }

@@ -13,7 +13,7 @@ func main() {
 
 	if err := run(); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: %v\n\n", err)
-		_ = commands.Help(nil, nil)
+		_ = commands.Help(lib.ParsedArgs{})
 		os.Exit(1)
 	}
 }
@@ -41,5 +41,5 @@ func run() error {
 		return fmt.Errorf("unknown command: %s", parsedArgs.Command)
 	}
 
-	return fn(parsedArgs.Args, parsedArgs.BoolOptions)
+	return fn(parsedArgs)
 }

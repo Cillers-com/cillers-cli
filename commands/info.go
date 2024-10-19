@@ -6,15 +6,16 @@ import (
     "strings"
 
     "cillers-cli/coder"
+    "cillers-cli/lib"
 )
 
-func Info(args []string, options map[string]bool) error {
-    if len(args) == 0 {
+func Info(parsedArgs lib.ParsedArgs) error {
+    if len(parsedArgs.Args) == 0 {
         return fmt.Errorf("no request provided")
     }
 
-    request := strings.Join(args, " ")
-    verbose := options["verbose"]
+    request := strings.Join(parsedArgs.Args, " ")
+    verbose := parsedArgs.BoolOptions["verbose"]
 
     ignorePatterns, err := coder.LoadIgnorePatterns(".cillers/context/ignore")
     if err != nil {

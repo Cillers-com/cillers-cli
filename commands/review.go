@@ -5,10 +5,11 @@ import (
     "os"
 
     "cillers-cli/coder"
+    "cillers-cli/lib"
 )
 
-func Review(args []string, options map[string]bool) error {
-    verbose := options["verbose"]
+func Review(parsedArgs lib.ParsedArgs) error {
+    verbose := parsedArgs.BoolOptions["verbose"]
 
     ignorePatterns, err := coder.LoadIgnorePatterns(".cillers/context/ignore")
     if err != nil {

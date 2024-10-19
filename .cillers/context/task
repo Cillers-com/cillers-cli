@@ -1,6 +1,10 @@
 <task>
-    Change the argv parsing so that flags can be assigned a value.
+    Update all command functions to accept ParsedArgs instead of separate args and options parameters. This would allow for easier access to both boolean and value options within the commands.
 </task>
+<task>
+    Add a validation step in parseOptions to ensure that options that don't take values (boolean options) are not provided with a value.
+</task>
+
 <restrictions>
     <restriction>
         You may add and change any file.

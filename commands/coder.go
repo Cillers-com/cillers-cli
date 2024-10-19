@@ -10,8 +10,8 @@ import (
     "cillers-cli/lib"
 )
 
-func Coder(args []string, options map[string]bool) error {
-    verbose := options["verbose"]
+func Coder(parsedArgs lib.ParsedArgs) error {
+    verbose := parsedArgs.BoolOptions["verbose"]
     var task string
 
     isClean, err := lib.IsWorkingTreeClean(".cillers/context/task")
@@ -34,8 +34,8 @@ func Coder(args []string, options map[string]bool) error {
         }
     }
 
-    if len(args) > 0 {
-        task = strings.Join(args, " ")
+    if len(parsedArgs.Args) > 0 {
+        task = strings.Join(parsedArgs.Args, " ")
     }
 
     ignorePatterns, err := coder.LoadIgnorePatterns(".cillers/context/ignore")

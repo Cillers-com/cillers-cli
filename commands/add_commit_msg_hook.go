@@ -5,9 +5,10 @@ import (
     "os"
     "path/filepath"
     "cillers-cli/coder/templates"
+    "cillers-cli/lib"
 )
 
-func AddCommitMsgHook(args []string, options map[string]bool) error {
+func AddCommitMsgHook(parsedArgs lib.ParsedArgs) error {
     if !isGitRepository() {
         return fmt.Errorf("not a git repository")
     }

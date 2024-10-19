@@ -1,15 +1,16 @@
 package commands
 
 import (
-	"fmt"
+    "fmt"
 
-	"cillers-cli/config"
+    "cillers-cli/config"
+    "cillers-cli/lib"
 )
 
-func Help(args []string, options map[string]bool) error {
-	cfg := config.LoadConfig()
-	
-	helpText := fmt.Sprintf(`Cillers CLI version %s
+func Help(parsedArgs lib.ParsedArgs) error {
+    cfg := config.LoadConfig()
+    
+    helpText := fmt.Sprintf(`Cillers CLI version %s
 
 Usage: cillers [command] [options]
 
@@ -20,7 +21,7 @@ Commands:
   coder [task]      AI coding assistant that follows the instructions in .cillers/context files.
   coder-init        Initialize a new .cillers/context directory with template files
   info <request>    Get information about the project
-  review            A code review with general feedback and specific violoations of the specified directives.
+  review            A code review with general feedback and specific violations of the specified directives.
   add-commit-msg-hook Add a Git prepare-commit-msg hook that uses Claude Sonnet API to generate commit messages
 
 Options:
@@ -41,7 +42,7 @@ Examples:
 For more information, please visit: %s
 `, cfg.Version, cfg.DocumentationURL)
 
-	fmt.Println(helpText)
-	
-	return nil
+    fmt.Println(helpText)
+    
+    return nil
 }

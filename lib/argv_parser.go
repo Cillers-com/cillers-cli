@@ -5,7 +5,6 @@ import (
 	"strings"
 )
 
-// ParsedArgs represents the parsed command-line arguments
 type ParsedArgs struct {
 	Command      string
 	Args         []string
@@ -13,9 +12,7 @@ type ParsedArgs struct {
 	ValueOptions map[string]string
 }
 
-// ParseArgv parses the command-line arguments
 func ParseArgv(args []string) (ParsedArgs, error) {
-	// Handle help and version as special cases
 	if contains(args, "--help") {
 		return ParsedArgs{Command: "help", Args: []string{}, BoolOptions: map[string]bool{}, ValueOptions: map[string]string{}}, nil
 	}
@@ -73,6 +70,9 @@ func parseOptions(args []string) (map[string]bool, map[string]string, error) {
 					return nil, nil, fmt.Errorf("option %s requires a value", option)
 				}
 			} else {
+				if i+1 < len(args) && !strings.HasPrefix(args[i+1], "--") {
+					return nil, nil, fmt.Errorf("boolean option %s should not have a value", option)
+				}
 				boolOptions[option] = true
 			}
 		}
@@ -80,7 +80,6 @@ func parseOptions(args []string) (map[string]bool, map[string]string, error) {
 	return boolOptions, valueOptions, nil
 }
 
-// IsOptionSet checks if a specific option was set in the command line arguments
 func (pa ParsedArgs) IsOptionSet(option string) bool {
 	if OptionTakesValue(option) {
 		_, exists := pa.ValueOptions[option]
@@ -89,13 +88,11 @@ func (pa ParsedArgs) IsOptionSet(option string) bool {
 	return pa.BoolOptions[option]
 }
 
-// GetOptionValue returns the value of an option that takes a value
 func (pa ParsedArgs) GetOptionValue(option string) (string, bool) {
 	value, exists := pa.ValueOptions[option]
 	return value, exists
 }
 
-// OptionTakesValue determines if an option should have a value
 func OptionTakesValue(option string) bool {
 	// Add options that should take values here
 	return false
