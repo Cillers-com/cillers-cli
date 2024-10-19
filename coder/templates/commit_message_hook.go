@@ -8,7 +8,7 @@ SHA1=$3
 
 # Only generate commit message for commits created by the user
 if [ -z "$COMMIT_SOURCE" ]; then
-    STAGED_DIFF=$(git diff --staged | base64)
+STAGED_DIFF=$(git diff --staged -- . ':(exclude).cillers/context/task' | base64)
     API_KEY=$(grep 'api_key:' .cillers/secrets_and_local_config/secrets.yml | awk '{print $2}')
     
     if [ -z "$API_KEY" ]; then
