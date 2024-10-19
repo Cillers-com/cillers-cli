@@ -1,10 +1,5 @@
 <task>
-    Change the GenerateCommitMsgHook function so that the bash script that it generates only prints:
-    * potential error messages
-    * the response body
-    * the response body file
-
-    Also changes this function so that it ask the user if the commit message is ok before sending it to git. 
+    Change the coder command so that it copies the prompt to the clipboard instead of printing it. Only print it if the verbose flag is set.  
 </task>
 <restrictions>
     <restriction>

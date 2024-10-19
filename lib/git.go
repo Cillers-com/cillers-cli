@@ -5,13 +5,11 @@ import (
 	"strings"
 )
 
-// IsGitInstalled checks if Git is installed and available in the PATH
 func IsGitInstalled() bool {
 	_, err := Execute(".", []string{"git", "--version"}, false)
 	return err == nil
 }
 
-// AssertOriginURL checks if the origin URL of the repository matches the expected URL
 func AssertOriginURL(path, expectedURL string) error {
 	result, err := Execute(path, []string{"git", "remote", "get-url", "origin"}, false)
 	if err != nil {
@@ -28,7 +26,6 @@ func AssertOriginURL(path, expectedURL string) error {
 	return nil
 }
 
-// Clone clones a Git repository
 func Clone(url, targetName, branch string, verbose bool) error {
 	args := []string{"git", "clone"}
 	
@@ -45,7 +42,6 @@ func Clone(url, targetName, branch string, verbose bool) error {
 	return nil
 }
 
-// Reset resets a Git repository to its initial state
 func Reset(path string, verbose bool) error {
 	commands := [][]string{
 		{"rm", "-rf", ".git"},
@@ -60,4 +56,13 @@ func Reset(path string, verbose bool) error {
 		}
 	}
 	return nil
+}
+
+func IsWorkingTreeClean() (bool, error) {
+	result, err := Execute(".", []string{"git", "status", "--porcelain"}, false)
+	if err != nil {
+		return false, fmt.Errorf("failed to check Git status: %w", err)
+	}
+	
+	return result.Stdout == "", nil
 }
