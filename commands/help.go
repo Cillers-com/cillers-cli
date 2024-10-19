@@ -21,6 +21,7 @@ Commands:
   coder-init        Initialize a new .cillers/context directory with template files
   info <request>    Get information about the project
   review            A code review with general feedback and specific violoations of the specified directives.
+  add-commit-msg-hook Add a Git prepare-commit-msg hook that uses Claude Sonnet API to generate commit messages
 
 Options:
   --verbose         Enable verbose output for debugging purposes
@@ -35,6 +36,7 @@ Examples:
   cillers version
   cillers review
   cillers coder-init
+  cillers add-commit-msg-hook
 
 For more information, please visit: %s
 `, cfg.Version, cfg.DocumentationURL)

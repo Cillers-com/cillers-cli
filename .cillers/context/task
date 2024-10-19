@@ -1,5 +1,6 @@
 <task>
-    Create a new command 'init-coder' that creates a template-based .cillers/context directory in the currwent working directory, if it doesn't already exist. The template should contain the same files and content as the current .cillers/context in this project. The content templates should be coded as multiline strings so they will be embedded in the binary. Create a new directory in this project called coder/templates/context. Create one Go file per file that should be created by the 'init-coder' command. 
+    Create a new command 'add-commit-msg-hook'. This command should add a git prepare-commit-msg hook that calls claude sonnet api to with the "git diff --staged" to get the commit message. Verify that git is initialized in the directory, otherwise fail with a good error message.
+    The Anthropic API_KEY should be fetched from the .cillers/secrets_and_local_config/secrets.yml file in the anthropic.api_key value.
 </task>
 <restrictions>
     <restriction>
@@ -9,3 +10,29 @@
         Do not change indentation. 
     </restriction>
 </restrictions>
+<directive>
+    Bash scripts must comply with the guidelines specified in the 'bash-directive' elements.
+</directive>
+<bash-directive id='no-dependencies-on-non-out-of-the-box-tools'>
+    Bash script must not depend on any tools that are not available on osx out-of-the-box, including any language that is the source language that installs the bash script. 
+</bash-directive>
+<bash-directive id="escape-values-in-json">
+    When generating JSON, you must escape values to make sure that the JSON doesn't become malformed.
+</bash>
+<directive id="anthropic-api">
+    Any code using the Anthropic Claude Sonnet REST API should be based on the following template which includes the current latest version numbers:
+
+curl https://api.anthropic.com/v1/messages \
+     --header "x-api-key: $ANTHROPIC_API_KEY" \
+     --header "anthropic-version: 2023-06-01" \
+     --header "content-type: application/json" \
+     --data \
+'{
+    "model": "claude-3-5-sonnet-20240620",
+    "max_tokens": 1,
+    "messages": [
+        {"role": "user", "content": "What is latin for Ant? (A) Apoidea, (B) Rhopalocera, (C) Formicidae"},
+        {"role": "assistant", "content": "The answer is ("}
+    ]
+}'
+</directive>

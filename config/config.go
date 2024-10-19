@@ -8,7 +8,7 @@ type Config struct {
 
 func LoadConfig() Config {
     return Config{
-        Version:         "v0.1.1",
+        Version:         "v0.1.2",
         TemplateRepoURL: "https://github.com/Cillers-com/create-cillers-system",
         DocumentationURL: "https://github.com/Cillers-com/cillers-cli",
     }

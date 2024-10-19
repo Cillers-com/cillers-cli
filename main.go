@@ -27,6 +27,7 @@ func registerCommands() {
 	lib.RegisterCommand("info", commands.Info)
 	lib.RegisterCommand("review", commands.Review)
 	lib.RegisterCommand("coder-init", commands.CoderInit)
+	lib.RegisterCommand("add-commit-msg-hook", commands.AddCommitMsgHook)
 }
 
 func run() error {
