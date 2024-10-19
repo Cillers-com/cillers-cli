@@ -41,5 +41,5 @@ func run() error {
 		return fmt.Errorf("unknown command: %s", parsedArgs.Command)
 	}
 
-	return fn(parsedArgs.Args, parsedArgs.Options)
+	return fn(parsedArgs.Args, parsedArgs.BoolOptions)
 }

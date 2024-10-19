@@ -7,24 +7,31 @@ import (
 
 // ParsedArgs represents the parsed command-line arguments
 type ParsedArgs struct {
-	Command string
-	Args    []string
-	Options map[string]bool
+	Command      string
+	Args         []string
+	BoolOptions  map[string]bool
+	ValueOptions map[string]string
 }
 
 // ParseArgv parses the command-line arguments
 func ParseArgv(args []string) (ParsedArgs, error) {
 	// Handle help and version as special cases
 	if contains(args, "--help") {
-		return ParsedArgs{Command: "help", Args: []string{}, Options: map[string]bool{}}, nil
+		return ParsedArgs{Command: "help", Args: []string{}, BoolOptions: map[string]bool{}, ValueOptions: map[string]string{}}, nil
 	}
 	if contains(args, "--version") {
-		return ParsedArgs{Command: "version", Args: []string{}, Options: map[string]bool{}}, nil
+		return ParsedArgs{Command: "version", Args: []string{}, BoolOptions: map[string]bool{}, ValueOptions: map[string]string{}}, nil
 	}
 
-	idx := indexOfFirstOption(args)
-	commandArgs := args[:idx]
-	optionArgs := args[idx:]
+	var commandArgs []string
+	var optionArgs []string
+	for i, arg := range args {
+		if strings.HasPrefix(arg, "--") {
+			optionArgs = args[i:]
+			break
+		}
+		commandArgs = append(commandArgs, arg)
+	}
 
 	if len(commandArgs) == 0 {
 		return ParsedArgs{}, fmt.Errorf("no command provided")
@@ -35,44 +42,63 @@ func ParseArgv(args []string) (ParsedArgs, error) {
 		return ParsedArgs{}, fmt.Errorf("unsupported command: %s", command)
 	}
 
-	options, err := parseOptions(optionArgs)
+	boolOptions, valueOptions, err := parseOptions(optionArgs)
 	if err != nil {
 		return ParsedArgs{}, err
 	}
 
 	return ParsedArgs{
-		Command: command,
-		Args:    commandArgs[1:],
-		Options: options,
+		Command:      command,
+		Args:         commandArgs[1:],
+		BoolOptions:  boolOptions,
+		ValueOptions: valueOptions,
 	}, nil
 }
 
-func indexOfFirstOption(args []string) int {
-	for i, arg := range args {
-		if strings.HasPrefix(arg, "--") {
-			return i
-		}
-	}
-	return len(args)
-}
-
-func parseOptions(args []string) (map[string]bool, error) {
-	options := make(map[string]bool)
-	for _, arg := range args {
+func parseOptions(args []string) (map[string]bool, map[string]string, error) {
+	boolOptions := make(map[string]bool)
+	valueOptions := make(map[string]string)
+	for i := 0; i < len(args); i++ {
+		arg := args[i]
 		if strings.HasPrefix(arg, "--") {
 			option := strings.TrimPrefix(arg, "--")
 			if !IsSupportedOption(option) {
-				return nil, fmt.Errorf("unsupported option: %s", arg)
+				return nil, nil, fmt.Errorf("unsupported option: %s", arg)
 			}
-			options[option] = true
+			if OptionTakesValue(option) {
+				if i+1 < len(args) && !strings.HasPrefix(args[i+1], "--") {
+					valueOptions[option] = args[i+1]
+					i++
+				} else {
+					return nil, nil, fmt.Errorf("option %s requires a value", option)
+				}
+			} else {
+				boolOptions[option] = true
+			}
 		}
 	}
-	return options, nil
+	return boolOptions, valueOptions, nil
 }
 
 // IsOptionSet checks if a specific option was set in the command line arguments
 func (pa ParsedArgs) IsOptionSet(option string) bool {
-	return pa.Options[option]
+	if OptionTakesValue(option) {
+		_, exists := pa.ValueOptions[option]
+		return exists
+	}
+	return pa.BoolOptions[option]
+}
+
+// GetOptionValue returns the value of an option that takes a value
+func (pa ParsedArgs) GetOptionValue(option string) (string, bool) {
+	value, exists := pa.ValueOptions[option]
+	return value, exists
+}
+
+// OptionTakesValue determines if an option should have a value
+func OptionTakesValue(option string) bool {
+	// Add options that should take values here
+	return false
 }
 
 func contains(slice []string, item string) bool {

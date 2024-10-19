@@ -22,7 +22,9 @@ func IsSupportedOption(option string) bool {
 	// Add your supported options here
 	supportedOptions := map[string]bool{
 		"verbose": true,
-		// Add more options as needed
+		"help":    true,
+		"version": true,
+		// Add all supported options here
 	}
 	return supportedOptions[option]
 }
@@ -34,4 +36,3 @@ func GetSupportedCommands() []string {
 	}
 	return commands
 }
-
