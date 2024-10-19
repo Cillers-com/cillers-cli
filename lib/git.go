@@ -3,6 +3,7 @@ package lib
 import (
     "fmt"
     "strings"
+    "path/filepath"
 )
 
 func IsGitInstalled() bool {
@@ -59,14 +60,33 @@ func Reset(path string, verbose bool) error {
 }
 
 func IsWorkingTreeClean(ignorePatterns ...string) (bool, error) {
-    args := []string{"git", "status", "--porcelain"}
-    for _, pattern := range ignorePatterns {
-        args = append(args, "--ignore-pattern="+pattern)
-    }
-    result, err := Execute(".", args, false)
+    result, err := Execute(".", []string{"git", "diff", "--name-only"}, false)
     if err != nil {
         return false, fmt.Errorf("failed to check Git status: %w", err)
     }
     
-    return result.Stdout == "", nil
+    files := strings.Split(strings.TrimSpace(result.Stdout), "\n")
+    for _, file := range files {
+        if file == "" {
+            continue
+        }
+        
+        ignored := false
+        for _, pattern := range ignorePatterns {
+            matched, err := filepath.Match(pattern, file)
+            if err != nil {
+                return false, fmt.Errorf("invalid ignore pattern '%s': %w", pattern, err)
+            }
+            if matched {
+                ignored = true
+                break
+            }
+        }
+        if !ignored {
+            return false, nil
+        }
+    }
+    
+    return true, nil
 }
+
