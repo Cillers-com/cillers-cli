@@ -54,10 +54,6 @@ EOF
 
     COMMIT_MSG=$(sed -n 's/.*"text":"\([^"]*\)".*/\1/p' "$RESPONSE_FILE" | sed 's/\\n/\n/g' | sed 's/\\"/"/g')
 
-    echo "Generated commit message:"
-    echo "$COMMIT_MSG"
-    echo "Response body file: $RESPONSE_FILE"
-
     if [ -z "$COMMIT_MSG" ]; then
         echo "Error: Failed to extract commit message from API response. Falling back to default editor." >&2
         echo "Response body file: $RESPONSE_FILE" >&2
@@ -76,7 +72,6 @@ EOF
     fi
 
     echo "$COMMIT_MSG" > "$COMMIT_MSG_FILE"
-    echo "Commit message saved to: $COMMIT_MSG_FILE"
 fi
 `
 }

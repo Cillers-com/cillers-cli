@@ -1,5 +1,5 @@
 <task>
-    Change the coder command so that it copies the prompt to the clipboard instead of printing it. Only print it if the verbose flag is set.  
+    Change the git commit message hook template so that the script that it generates doesn't print anything to the terminal except error messages. 
 </task>
 <restrictions>
     <restriction>
