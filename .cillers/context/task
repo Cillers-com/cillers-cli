@@ -1,5 +1,10 @@
 <task>
-    Change the git commit message hook template so that the script that it generates doesn't print anything to the terminal except error messages. 
+    Make the IsWorkingTreeClean function take an optional array parameter called ignore_patterns.
+
+    Then ignore those patterns in the call to git status, like so:
+    git status --ignore-pattern=file1 --ignore-pattern=file2 
+
+    Change the Coder function to call IsWorkingTreeClean with [".cillers/context/task"] as value for this new parameter. 
 </task>
 <restrictions>
     <restriction>

@@ -14,7 +14,7 @@ func Coder(args []string, options map[string]bool) error {
     verbose := options["verbose"]
     var task string
 
-    isClean, err := lib.IsWorkingTreeClean()
+    isClean, err := lib.IsWorkingTreeClean(".cillers/context/task")
     if err != nil {
         return fmt.Errorf("error checking Git working tree: %w", err)
     }
