@@ -5,6 +5,7 @@ import (
     "os"
     "strings"
     "bufio"
+    "path/filepath"
 
     "cillers-cli/coder"
     "cillers-cli/lib"
@@ -96,5 +97,48 @@ func Coder(parsedArgs lib.ParsedArgs) error {
     fmt.Printf("  Improvement Suggestions: %s\n", changeProposal.CodeReview.ImprovementSuggestions)
     fmt.Printf("  Code Quality Assessment: %s\n", changeProposal.CodeReview.CodeQualityAssessment)
 
+    // Confirmation before applying changes
+    fmt.Print("\nDo you want to apply these changes? (y/N): ")
+    reader := bufio.NewReader(os.Stdin)
+    response, err := reader.ReadString('\n')
+    if err != nil {
+        return fmt.Errorf("error reading user input: %w", err)
+    }
+    response = strings.TrimSpace(strings.ToLower(response))
+    if response != "y" && response != "yes" {
+        fmt.Println("Changes not applied.")
+        return nil
+    }
+
+    // Apply changes
+    for _, file := range changeProposal.Specification.FilesToBeCreated {
+        err := os.MkdirAll(filepath.Dir(file.Path), 0755)
+        if err != nil {
+            return fmt.Errorf("error creating directory for file %s: %w", file.Path, err)
+        }
+        err = os.WriteFile(file.Path, []byte(file.Content), 0644)
+        if err != nil {
+            return fmt.Errorf("error creating file %s: %w", file.Path, err)
+        }
+        fmt.Printf("Created file: %s\n", file.Path)
+    }
+
+    for _, file := range changeProposal.Specification.FilesToBeUpdated {
+        err := os.WriteFile(file.Path, []byte(file.Content), 0644)
+        if err != nil {
+            return fmt.Errorf("error updating file %s: %w", file.Path, err)
+        }
+        fmt.Printf("Updated file: %s\n", file.Path)
+    }
+
+    for _, file := range changeProposal.Specification.FilesToBeDeleted {
+        err := os.Remove(file.Path)
+        if err != nil {
+            return fmt.Errorf("error deleting file %s: %w", file.Path, err)
+        }
+        fmt.Printf("Deleted file: %s\n", file.Path)
+    }
+
+    fmt.Println("Changes applied successfully.")
     return nil
 }

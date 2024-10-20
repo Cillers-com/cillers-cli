@@ -1,5 +1,5 @@
 <task>
-    Print "start"
+    Make main print 'done'
 </task>
 
 <restrictions>
