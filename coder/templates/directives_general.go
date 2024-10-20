@@ -5,6 +5,10 @@ const GeneralDirectivesTemplate = `
     Use self-documenting variable, function, class and file names. Functions should be named to reflect the output they are expected to produce. Files should be named with the category of functions that it contains. 
 </directive>
 
+<response-directive>
+    Always respond with the full contents of all code files. Never leave any code out in a file.  
+</response-directive>
+
 <directive id="import-organization">
     Import Organization:
     Group imports as follows:

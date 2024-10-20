@@ -1,5 +1,5 @@
 <task>
-    Make main print "start" 
+    Remove the use of golang.org/x/term. Implement the logic for ReadPassword without dependency on other package. 
 </task>
 
 <restrictions>

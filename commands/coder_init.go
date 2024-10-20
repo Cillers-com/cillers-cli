@@ -47,7 +47,12 @@ func CoderInit(parsedArgs lib.ParsedArgs) error {
     }
 
     secretsFilePath := filepath.Join(secretsDir, "secrets.yml")
-    if err := createFileWithContent(secretsFilePath, templates.SecretsTemplate, verbose, force); err != nil {
+    apiKey, err := promptForAPIKey()
+    if err != nil {
+        return err
+    }
+    secretsContent := fmt.Sprintf(templates.SecretsTemplate, apiKey)
+    if err := createFileWithContent(secretsFilePath, secretsContent, verbose, force); err != nil {
         return err
     }
 
@@ -109,4 +114,13 @@ func confirmOverwrite(path string) bool {
         }
         fmt.Println("Please answer with 'y' or 'n'.")
     }
+}
+
+func promptForAPIKey() (string, error) {
+    fmt.Print("Enter your Anthropic API key: ")
+    apiKey, err := lib.ReadPassword()
+    if err != nil {
+        return "", fmt.Errorf("error reading API key: %w", err)
+    }
+    return apiKey, nil
 }

@@ -1,7 +1,5 @@
 package templates
 
-const SecretsTemplate = `
-anthropic:
-  api_key: xxx
-
+const SecretsTemplate = `anthropic:
+  api_key: %s
 `

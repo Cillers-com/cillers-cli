@@ -5,3 +5,7 @@
 <directive id="glob-pattern-ignore-support">
     The ignore file functionality in the coder module should support ** glob pattern. 
 </directive>
+
+<directive id="no-support-for-windows">
+    Don't add support for Windows. We only need to support UNIX like system, such as Linux and MacOS. 
+</directive>

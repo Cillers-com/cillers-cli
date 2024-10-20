@@ -2,6 +2,9 @@
     Your reponse must comply with the response-directives and be formatted as specified by the response-structure. Do not consider anything else in this prompt when laying out your response. 
 </directive>
 
+<response-directive>
+    Always respond with the full contents of all code files. Never leave any code out in a file.  
+</response-directive>
 
 <response-directive>
     Your response must only contain response-structure with filled in content. You must not prefix this with any text. 
