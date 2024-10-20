@@ -1,6 +1,7 @@
 package templates
 
-const GeneralDirectivesTemplate = `<content><directive id="self-documenting-names">
+const GeneralDirectivesTemplate = `
+<directive id="self-documenting-names">
     Use self-documenting variable, function, class and file names. Functions should be named to reflect the output they are expected to produce. Files should be named with the category of functions that it contains. 
 </directive>
 
@@ -54,4 +55,39 @@ const GeneralDirectivesTemplate = `<content><directive id="self-documenting-name
 <directive id="non-zero-exit-on-failure">
     The process must exit with a non-zero code if it was not successful. 
 </directive>
-</content>`
+
+<directive id="max-100-characters-per-line">
+    Max 100 characters per line.
+</directive>
+
+<directive id="bash-directive">
+    Bash scripts must comply with the guidelines specified in the 'bash-directive' elements.
+</directive>
+
+<bash-directive id='no-dependencies-on-non-out-of-the-box-tools'>
+    Bash script must not depend on any tools that are not available on osx out-of-the-box, including any language that is the source language that installs the bash script. 
+</bash-directive>
+
+<bash-directive id="escape-values-in-json">
+    When generating JSON, you must escape values to make sure that the JSON doesn't become malformed.
+</bash-directive>
+
+<directive id="anthropic-api">
+    Any code using the Anthropic Claude Sonnet REST API should be based on the following template which includes the current latest version numbers:
+
+curl https://api.anthropic.com/v1/messages \
+     --header &quot;x-api-key: $ANTHROPIC_API_KEY&quot; \
+     --header &quot;anthropic-version: 2023-06-01&quot; \
+     --header &quot;content-type: application/json&quot; \
+     --data \
+&apos;{
+    &quot;model&quot;: &quot;claude-3-5-sonnet-20240620&quot;,
+    &quot;max_tokens&quot;: 1,
+    &quot;messages&quot;: [
+        {&quot;role&quot;: &quot;user&quot;, &quot;content&quot;: &quot;What is latin for Ant? (A) Apoidea, (B) Rhopalocera, (C) Formicidae&quot;},
+        {&quot;role&quot;: &quot;assistant&quot;, &quot;content&quot;: &quot;The answer is (&quot;}
+    ]
+}&apos;
+</directive>
+`
+

@@ -1,7 +1,0 @@
-<directive id="main-function-structure">
-    The main function should call another function called run that returns an error if unsuccessful. The main function should exit with a non-zero error if the run function returns an error. 
-</directive>
-
-<directive id="concise-functions">
-    All functions should be as short as possible. Move as much logic as possible out from the function to helper functions.
-</directive>

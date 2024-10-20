@@ -53,11 +53,11 @@
     The process must exit with a non-zero code if it was not successful. 
 </directive>
 
-<directive>
+<directive id="max-100-characters-per-line">
     Max 100 characters per line.
 </directive>
 
-<directive>
+<directive id="bash-directive">
     Bash scripts must comply with the guidelines specified in the 'bash-directive' elements.
 </directive>
 

@@ -1,9 +1,11 @@
 package commands
 
 import (
+    "bufio"
     "fmt"
     "os"
     "path/filepath"
+    "strings"
 
     "cillers-cli/coder/templates"
     "cillers-cli/lib"
@@ -17,12 +19,13 @@ func CoderInit(parsedArgs lib.ParsedArgs) error {
     }
 
     contextDir := filepath.Join(currentDir, ".cillers", "context")
-    if err := os.MkdirAll(contextDir, 0755); err != nil {
-        return fmt.Errorf("error creating context directory: %w", err)
+    if err := createDirIfNotExists(contextDir, verbose); err != nil {
+        return err
     }
 
-    if verbose {
-        fmt.Printf("Creating .cillers/context directory in %s\n", currentDir)
+    secretsDir := filepath.Join(currentDir, ".cillers", "secrets_and_local_config")
+    if err := createDirIfNotExists(secretsDir, verbose); err != nil {
+        return err
     }
 
     files := map[string]string{
@@ -37,20 +40,72 @@ func CoderInit(parsedArgs lib.ParsedArgs) error {
 
     for file, content := range files {
         filePath := filepath.Join(contextDir, file)
-        dirPath := filepath.Dir(filePath)
-        if err := os.MkdirAll(dirPath, 0755); err != nil {
-            return fmt.Errorf("error creating directory %s: %w", dirPath, err)
-        }
-
-        if err := os.WriteFile(filePath, []byte(content), 0644); err != nil {
-            return fmt.Errorf("error writing file %s: %w", filePath, err)
-        }
-
-        if verbose {
-            fmt.Printf("Created file: %s\n", filePath)
+        if err := createFileWithContent(filePath, content, verbose); err != nil {
+            return err
         }
     }
 
-    fmt.Println("Successfully initialized .cillers/context directory with template files.")
+    secretsFilePath := filepath.Join(secretsDir, "secrets.yml")
+    if err := createFileWithContent(secretsFilePath, templates.SecretsTemplate, verbose); err != nil {
+        return err
+    }
+
+    fmt.Println("Successfully initialized .cillers/context and .cillers/secrets_and_local_config directories with template files.")
     return nil
+}
+
+func createDirIfNotExists(path string, verbose bool) error {
+    if _, err := os.Stat(path); os.IsNotExist(err) {
+        if err := os.MkdirAll(path, 0755); err != nil {
+            return fmt.Errorf("error creating directory %s: %w", path, err)
+        }
+        if verbose {
+            fmt.Printf("Created directory: %s\n", path)
+        }
+    } else if verbose {
+        fmt.Printf("Directory already exists: %s\n", path)
+    }
+    return nil
+}
+
+func createFileWithContent(path string, content string, verbose bool) error {
+    dirPath := filepath.Dir(path)
+    if err := createDirIfNotExists(dirPath, verbose); err != nil {
+        return err
+    }
+
+    if _, err := os.Stat(path); err == nil {
+        if !confirmOverwrite(path) {
+            fmt.Printf("Skipping file: %s\n", path)
+            return nil
+        }
+    }
+
+    if err := os.WriteFile(path, []byte(content), 0644); err != nil {
+        return fmt.Errorf("error writing file %s: %w", path, err)
+    }
+
+    if verbose {
+        fmt.Printf("Created file: %s\n", path)
+    }
+    return nil
+}
+
+func confirmOverwrite(path string) bool {
+    reader := bufio.NewReader(os.Stdin)
+    for {
+        fmt.Printf("File %s already exists. Overwrite? (y/n): ", path)
+        response, err := reader.ReadString('\n')
+        if err != nil {
+            fmt.Println("Error reading input:", err)
+            return false
+        }
+        response = strings.ToLower(strings.TrimSpace(response))
+        if response == "y" || response == "yes" {
+            return true
+        } else if response == "n" || response == "no" {
+            return false
+        }
+        fmt.Println("Please answer with 'y' or 'n'.")
+    }
 }
