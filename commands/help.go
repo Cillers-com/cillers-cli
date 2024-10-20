@@ -26,6 +26,7 @@ Commands:
 
 Options:
   --verbose         Enable verbose output for debugging purposes
+  --force           Skip user confirmation prompts and apply changes automatically
 
 Examples:
   cillers new my-project
@@ -33,10 +34,12 @@ Examples:
   cillers help
   cillers coder
   cillers coder "Rename the foo function to bar."
+  cillers coder --force "Rename the foo function to bar."
   cillers info "Create a list of all the functions in this project and list the functions they are used by. Are any of the functions unused in this project?"
   cillers version
   cillers review
   cillers coder-init
+  cillers coder-init --force
   cillers add-commit-msg-hook
 
 For more information, please visit: %s

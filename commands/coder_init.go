@@ -13,6 +13,7 @@ import (
 
 func CoderInit(parsedArgs lib.ParsedArgs) error {
     verbose := parsedArgs.BoolOptions["verbose"]
+    force := parsedArgs.BoolOptions["force"]
     currentDir, err := os.Getwd()
     if err != nil {
         return fmt.Errorf("error getting current directory: %w", err)
@@ -40,13 +41,13 @@ func CoderInit(parsedArgs lib.ParsedArgs) error {
 
     for file, content := range files {
         filePath := filepath.Join(contextDir, file)
-        if err := createFileWithContent(filePath, content, verbose); err != nil {
+        if err := createFileWithContent(filePath, content, verbose, force); err != nil {
             return err
         }
     }
 
     secretsFilePath := filepath.Join(secretsDir, "secrets.yml")
-    if err := createFileWithContent(secretsFilePath, templates.SecretsTemplate, verbose); err != nil {
+    if err := createFileWithContent(secretsFilePath, templates.SecretsTemplate, verbose, force); err != nil {
         return err
     }
 
@@ -68,13 +69,13 @@ func createDirIfNotExists(path string, verbose bool) error {
     return nil
 }
 
-func createFileWithContent(path string, content string, verbose bool) error {
+func createFileWithContent(path string, content string, verbose bool, force bool) error {
     dirPath := filepath.Dir(path)
     if err := createDirIfNotExists(dirPath, verbose); err != nil {
         return err
     }
 
-    if _, err := os.Stat(path); err == nil {
+    if _, err := os.Stat(path); err == nil && !force {
         if !confirmOverwrite(path) {
             fmt.Printf("Skipping file: %s\n", path)
             return nil

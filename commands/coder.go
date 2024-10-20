@@ -13,6 +13,7 @@ import (
 
 func Coder(parsedArgs lib.ParsedArgs) error {
     verbose := parsedArgs.BoolOptions["verbose"]
+    force := parsedArgs.BoolOptions["force"]
     var task string
 
     isClean, err := lib.IsWorkingTreeClean(".cillers/context/task")
@@ -20,7 +21,7 @@ func Coder(parsedArgs lib.ParsedArgs) error {
         return fmt.Errorf("error checking Git working tree: %w", err)
     }
 
-    if !isClean {
+    if !isClean && !force {
         fmt.Println("Warning: The Git working tree is not clean.")
         fmt.Print("Do you want to proceed anyway? (y/N): ")
         reader := bufio.NewReader(os.Stdin)
@@ -98,16 +99,18 @@ func Coder(parsedArgs lib.ParsedArgs) error {
     fmt.Printf("  Code Quality Assessment: %s\n", changeProposal.CodeReview.CodeQualityAssessment)
 
     // Confirmation before applying changes
-    fmt.Print("\nDo you want to apply these changes? (y/N): ")
-    reader := bufio.NewReader(os.Stdin)
-    response, err := reader.ReadString('\n')
-    if err != nil {
-        return fmt.Errorf("error reading user input: %w", err)
-    }
-    response = strings.TrimSpace(strings.ToLower(response))
-    if response != "y" && response != "yes" {
-        fmt.Println("Changes not applied.")
-        return nil
+    if !force {
+        fmt.Print("\nDo you want to apply these changes? (y/N): ")
+        reader := bufio.NewReader(os.Stdin)
+        response, err := reader.ReadString('\n')
+        if err != nil {
+            return fmt.Errorf("error reading user input: %w", err)
+        }
+        response = strings.TrimSpace(strings.ToLower(response))
+        if response != "y" && response != "yes" {
+            fmt.Println("Changes not applied.")
+            return nil
+        }
     }
 
     // Apply changes

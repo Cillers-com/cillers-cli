@@ -1,5 +1,5 @@
 <task>
-    Add a --force boolean option flag. And change all commands so that they only ask for user input if this flag is not set.  
+    Make main print "start" 
 </task>
 
 <restrictions>
