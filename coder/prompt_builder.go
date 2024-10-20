@@ -5,12 +5,7 @@ import (
     "os"
     "path/filepath"
     "strings"
-    "html"
 )
-
-func escapeXML(s string) string {
-    return html.EscapeString(s)
-}
 
 func GenerateReviewPrompt(fileContents map[string]string) (string, error) {
     promptDir := ".cillers/context"
@@ -146,17 +141,3 @@ func writeXMLSection(builder *strings.Builder, tag, header, content string) {
     builder.WriteString(fmt.Sprintf("  </%s>\n", tag))
 }
 
-func PrintSortedFileContentsToXMLBuilder(builder *strings.Builder, fileContents map[string]string, ignoreFile string) {
-    ignorePatterns, err := LoadIgnorePatterns(ignoreFile)
-    if err != nil {
-        fmt.Printf("Error reading ignore patterns: %v\n", err)
-        ignorePatterns = []string{}
-    }
-
-    sortedFiles := getSortedFiles(fileContents)
-    for _, path := range sortedFiles {
-        if !matchesIgnorePattern(path, ignorePatterns) {
-            builder.WriteString(fmt.Sprintf("    <file path=\"%s\">\n      <content>\n%s\n      </content>\n    </file>\n", escapeXML(path), escapeXML(fileContents[path])))
-        }
-    }
-}

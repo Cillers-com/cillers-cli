@@ -4,3 +4,5 @@
 .git
 build
 .cillers
+tmp
+coder/templates
