@@ -23,7 +23,7 @@ STAGED_DIFF=$(git diff --staged -- . ':(exclude).cillers/context/task' | base64)
     "messages": [
         {
             "role": "user",
-            "content": "Generate a Git commit message for the following changes (base64 encoded, please decode before processing):\n\n$STAGED_DIFF"
+            "content": "Generate a Git commit message for the following changes (base64 encoded, please decode before processing). Your response must not include any other text than the commit message itself.\n\n$STAGED_DIFF"
         }
     ]
 }
