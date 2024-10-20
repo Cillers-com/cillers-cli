@@ -58,16 +58,18 @@ func Coder(parsedArgs lib.ParsedArgs) error {
         return fmt.Errorf("error building prompt: %w", err)
     }
 
-    err = lib.CopyToClipboard(prompt)
-    if err != nil {
-        return fmt.Errorf("error copying prompt to clipboard: %w", err)
-    }
-    
     if verbose {
         fmt.Println("Generated prompt for Coder:")
         fmt.Print(prompt)
-    } else {
-        fmt.Println("Prompt has been copied to the clipboard.")
     }
+
+    response, err := lib.SendPromptToAnthropic(prompt)
+    if err != nil {
+        return fmt.Errorf("error sending prompt to Anthropic: %w", err)
+    }
+
+    fmt.Println("Response from Anthropic:")
+    fmt.Println(response)
+
     return nil
 }

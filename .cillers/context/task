@@ -1,7 +1,5 @@
 <task>
-    Change the 'coder' command so that it sends the prompt to Anthropic Claude Sonnet REST API instead of copying it to the clipboard.
-    Print the prompt if the verbose flag is set. 
-    Print the response from Anthropic.
+    Add one test.
 </task>
 
 <restrictions>
