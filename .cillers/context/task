@@ -1,5 +1,5 @@
 <task>
-    Add one test.
+    Print "start"
 </task>
 
 <restrictions>
@@ -13,3 +13,4 @@
         Do not change indentation. 
     </restriction>
 </restrictions>
+

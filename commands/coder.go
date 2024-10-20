@@ -1,10 +1,10 @@
 package commands
 
 import (
-    "bufio"
     "fmt"
     "os"
     "strings"
+    "bufio"
 
     "cillers-cli/coder"
     "cillers-cli/lib"
@@ -63,13 +63,38 @@ func Coder(parsedArgs lib.ParsedArgs) error {
         fmt.Print(prompt)
     }
 
-    response, err := lib.SendPromptToAnthropic(prompt)
+    changeProposal, err := lib.SendPromptToAnthropic(prompt)
     if err != nil {
         return fmt.Errorf("error sending prompt to Anthropic: %w", err)
     }
 
-    fmt.Println("Response from Anthropic:")
-    fmt.Println(response)
+    fmt.Println("\nParsed Change Proposal:")
+    fmt.Printf("Description:\n")
+    fmt.Printf("  Change Summary: %s\n", changeProposal.Description.ChangeSummary)
+    for _, detail := range changeProposal.Description.ChangeDetails {
+        fmt.Printf("  Change Detail: %s\n", detail)
+    }
+
+    fmt.Printf("\nSpecification:\n")
+    fmt.Printf("  Files to be created:\n")
+    for _, file := range changeProposal.Specification.FilesToBeCreated {
+        fmt.Printf("    Path: %s\n", file.Path)
+        fmt.Printf("    Content:\n%s\n", file.Content)
+    }
+    fmt.Printf("  Files to be updated:\n")
+    for _, file := range changeProposal.Specification.FilesToBeUpdated {
+        fmt.Printf("    Path: %s\n", file.Path)
+        fmt.Printf("    Content:\n%s\n", file.Content)
+    }
+    fmt.Printf("  Files to be deleted:\n")
+    for _, file := range changeProposal.Specification.FilesToBeDeleted {
+        fmt.Printf("    Path: %s\n", file.Path)
+    }
+
+    fmt.Printf("\nCode Review:\n")
+    fmt.Printf("  Positive Feedback: %s\n", changeProposal.CodeReview.PositiveFeedback)
+    fmt.Printf("  Improvement Suggestions: %s\n", changeProposal.CodeReview.ImprovementSuggestions)
+    fmt.Printf("  Code Quality Assessment: %s\n", changeProposal.CodeReview.CodeQualityAssessment)
 
     return nil
 }

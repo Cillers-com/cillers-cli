@@ -33,11 +33,11 @@ type AnthropicResponse struct {
     } `json:"content"`
 }
 
-func SendPromptToAnthropic(prompt string) (string, error) {
+func SendPromptToAnthropic(prompt string) (*ChangeProposal, error) {
     var conf config.Config = config.LoadConfig()
     apiKey := conf.AnthropicAPIKey
     if apiKey == "" {
-        return "", fmt.Errorf("ANTHROPIC_API_KEY environment variable is not set")
+        return nil, fmt.Errorf("ANTHROPIC_API_KEY environment variable is not set")
     }
     request := AnthropicRequest{
         Model:     AnthropicModel,
@@ -49,12 +49,12 @@ func SendPromptToAnthropic(prompt string) (string, error) {
 
     jsonData, err := json.Marshal(request)
     if err != nil {
-        return "", fmt.Errorf("error marshaling request: %w", err)
+        return nil, fmt.Errorf("error marshaling request: %w", err)
     }
 
     req, err := http.NewRequest("POST", AnthropicAPIURL, bytes.NewBuffer(jsonData))
     if err != nil {
-        return "", fmt.Errorf("error creating request: %w", err)
+        return nil, fmt.Errorf("error creating request: %w", err)
     }
 
     req.Header.Set("Content-Type", "application/json")
@@ -64,28 +64,34 @@ func SendPromptToAnthropic(prompt string) (string, error) {
     client := &http.Client{}
     resp, err := client.Do(req)
     if err != nil {
-        return "", fmt.Errorf("error sending request: %w", err)
+        return nil, fmt.Errorf("error sending request: %w", err)
     }
     defer resp.Body.Close()
 
     body, err := ioutil.ReadAll(resp.Body)
     if err != nil {
-        return "", fmt.Errorf("error reading response body: %w", err)
+        return nil, fmt.Errorf("error reading response body: %w", err)
     }
 
     if resp.StatusCode != http.StatusOK {
-        return "", fmt.Errorf("API request failed with status code %d: %s", resp.StatusCode, string(body))
+        return nil, fmt.Errorf("API request failed with status code %d: %s", resp.StatusCode, string(body))
     }
 
     var anthropicResp AnthropicResponse
     err = json.Unmarshal(body, &anthropicResp)
     if err != nil {
-        return "", fmt.Errorf("error unmarshaling response: %w", err)
+        return nil, fmt.Errorf("error unmarshaling response: %w", err)
     }
 
     if len(anthropicResp.Content) == 0 {
-        return "", fmt.Errorf("empty response from Anthropic API")
+        return nil, fmt.Errorf("empty response from Anthropic API")
     }
 
-    return anthropicResp.Content[0].Text, nil
+    xmlResponse := anthropicResp.Content[0].Text
+    changeProposal, err := ParseAnthropicResponse(xmlResponse)
+    if err != nil {
+        return nil, fmt.Errorf("error parsing Anthropic response: %w", err)
+    }
+
+    return changeProposal, nil
 }
